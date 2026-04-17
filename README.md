@@ -59,3 +59,10 @@
 3. **Temuan:** Memeriksa Page Source pada halaman error tersebut dan menemukan Flag yang "terbocor" akibat gangguan pada logika database.
    
 4. **Pelajaran:** Matikan pesan error detail di sisi produksi agar tidak memberikan informasi berharga kepada penyerang.
+
+
+
+======================================================================================================================
+
+Nama Level: Micro-CMS v2
+
