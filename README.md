@@ -24,6 +24,9 @@
 1. **Identifikasi Input:** Menemukan fitur "Create a new page" yang menerima input teks.
 2. **Uji Coba:** Memasukkan kode script `<script>alert('XSS')</script>` ke dalam kolom Title.
 3. **Eksekusi:** Setelah halaman disimpan, kembali ke halaman utama. Script tereksekusi secara otomatis dan memunculkan pop-up berisi Flag.
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a2623f5d-38a1-4a62-a507-c9a581a84a74" />
+
 4. **Pelajaran:** Selalu lakukan sanitasi pada setiap input pengguna sebelum data tersebut disimpan ke database dan ditampilkan kembali.
 
 ---
@@ -32,7 +35,13 @@
 #### Tahapan (Step-by-Step):
 1. **Analisis Filter:** Website memberikan peringatan bahwa script tidak didukung.
 2. **Bypass:** Menggunakan tag HTML alternatif yang memiliki atribut *event handler*, yaitu `<img src=x onerror=alert(1)>`.
+
+<img width="1272" height="828" alt="image" src="https://github.com/user-attachments/assets/57e8e8f8-5cad-4aaf-b2d6-c60898997e8a" />
+
 3. **Eksekusi:** Script berhasil dijalankan karena filter hanya mencari kata kunci `<script>`. Flag ditemukan di dalam Page Source (Ctrl+U).
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/dffe75fe-4def-4e29-94b0-e67661406e85" />
+
 
 ---
 
@@ -40,6 +49,10 @@
 #### Tahapan (Step-by-Step):
 1. **Triggering Error:** Menambahkan tanda petik satu (`'`) di akhir URL, misalnya `/edit/1'`.
 2. **Analisis Respon:** Server mengalami error dan menampilkan pesan kesalahan database yang sangat detail.
+
+<img width="1164" height="227" alt="image" src="https://github.com/user-attachments/assets/b557fd0e-710a-47c9-b768-fad34a2801ec" />
+
+
 3. **Temuan:** Memeriksa Page Source pada halaman error tersebut dan menemukan Flag yang "terbocor" akibat gangguan pada logika database.
    
-5. **Pelajaran:** Matikan pesan error detail di sisi produksi agar tidak memberikan informasi berharga kepada penyerang.
+4. **Pelajaran:** Matikan pesan error detail di sisi produksi agar tidak memberikan informasi berharga kepada penyerang.
