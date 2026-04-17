@@ -12,6 +12,9 @@
 #### Tahapan (Step-by-Step):
 1. **Analisis URL:** Saat membuka halaman, URL menunjukkan pola `/page/1`.
 2. **Eksperimen:** Mencoba mengakses halaman yang tidak ada di menu, yaitu `/page/7`, namun mendapatkan respon "Forbidden".
+
+<img width="1302" height="337" alt="image" src="https://github.com/user-attachments/assets/ab56012f-4d10-4d04-b8cd-13f20d11a8f7" />
+
 3. **Exploitation:** Mengubah URL menjadi `/edit/7`. Karena proteksi hanya ada pada tampilan (*view*) tapi tidak pada fungsi edit, halaman terbuka dan Flag ditemukan di kode sumber.
 
 <img width="1204" height="541" alt="Screenshot 2026-04-17 085621" src="https://github.com/user-attachments/assets/22c9a1ee-8170-4d7f-9176-ab40a19df5cd" />
