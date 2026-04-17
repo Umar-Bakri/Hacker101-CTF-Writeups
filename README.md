@@ -73,6 +73,10 @@
 1. **Triggering Error:** Memasukkan tanda petik satu (`'`) pada kolom username di form login.
 2. **Analisis Respon:** Server merespon dengan "Internal Server Error (500)", yang mengonfirmasi bahwa input tanda petik merusak struktur kueri SQL di backend (*vulnerable*).
 3. **Exploitation:** Menggunakan payload `' UNION SELECT 'x' -- ` di kolom username untuk memanipulasi hasil database agar mengembalikan password palsu berupa karakter 'x'.
+
+<img width="1215" height="451" alt="image" src="https://github.com/user-attachments/assets/3137326c-1f2d-4076-9f70-03a681fec862" />
 4. **Eksekusi:** Mengisi kolom password dengan `x` agar cocok dengan hasil manipulasi database. Login berhasil dan sistem memberikan akses admin.
 5. **Temuan:** Flag ditemukan di dalam menu "Private Page" yang baru muncul setelah login berhasil.
+
+
 
