@@ -61,26 +61,12 @@
 4. **Pelajaran:** Matikan pesan error detail di sisi produksi agar tidak memberikan informasi berharga kepada penyerang.
 
 
-Flag ID: Flag #1 - SQL Injection (Authentication Bypass)
-Tahapan (Step-by-Step):
-Triggering Error: Memasukkan tanda petik satu (') pada kolom username di form login.
+### Flag ID: Flag #1 - SQL Injection (Authentication Bypass)
+#### Tahapan (Step-by-Step):
 
-Analisis Respon: Server merespon dengan "Internal Server Error (500)", yang mengonfirmasi bahwa input tanda petik merusak struktur kueri SQL di backend (vulnerable).
-
-Exploitation: Menggunakan payload ' UNION SELECT 'x' --  di kolom username untuk memanipulasi hasil database agar mengembalikan password palsu berupa karakter 'x'.
-
-Eksekusi: Mengisi kolom password dengan x agar cocok dengan hasil manipulasi database. Login berhasil dan sistem memberikan akses admin.
-
-Temuan: Flag ditemukan di dalam menu "Private Page" yang baru muncul setelah login berhasil.
-
-Flag ID: Flag #2 - IDOR (Insecure Direct Object Reference)
-Tahapan (Step-by-Step):
-Analisis URL: Memperhatikan pola URL saat menggunakan fitur edit halaman, yaitu /edit/1 dan /edit/2.
-
-Eksperimen: Mencoba melakukan akses langsung (direct access) dengan mengganti ID di URL secara manual menjadi /edit/3.
-
-Eksekusi: Halaman tersembunyi yang tidak muncul di daftar menu utama berhasil terbuka karena kurangnya pengecekan otorisasi pada level objek.
-
-Temuan: Flag ditemukan di dalam judul atau isi konten pada halaman rahasia tersebut
-
+1. **Triggering Error:** Memasukkan tanda petik satu (`'`) pada kolom username di form login.
+2. **Analisis Respon:** Server merespon dengan "Internal Server Error (500)", yang mengonfirmasi bahwa input tanda petik merusak struktur kueri SQL di backend (*vulnerable*).
+3. **Exploitation:** Menggunakan payload `' UNION SELECT 'x' -- ` di kolom username untuk memanipulasi hasil database agar mengembalikan password palsu berupa karakter 'x'.
+4. **Eksekusi:** Mengisi kolom password dengan `x` agar cocok dengan hasil manipulasi database. Login berhasil dan sistem memberikan akses admin.
+5. **Temuan:** Flag ditemukan di dalam menu "Private Page" yang baru muncul setelah login berhasil.
 
