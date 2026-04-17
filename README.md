@@ -61,8 +61,42 @@
 4. **Pelajaran:** Matikan pesan error detail di sisi produksi agar tidak memberikan informasi berharga kepada penyerang.
 
 
-
-======================================================================================================================
-
 Nama Level: Micro-CMS v2
+Target URL: [https://ctf.hacker101.com/launch/...]
+
+Flag ID: Flag #1 - SQL Injection (Authentication Bypass)
+Tahapan (Step-by-Step):
+Analisis Login: Menemukan halaman login. Mencoba memasukkan kredensial acak seperti admin:admin, namun mendapatkan respon "Unknown user" atau "Invalid password".
+
+Triggering Error: Memasukkan tanda petik satu (') pada kolom username untuk menguji kerentanan SQL Injection. Server merespon dengan Internal Server Error (500).
+
+<img width="1164" height="227" alt="Error 500 SQLi" src="GANTI_DENGAN_LINK_GAMBAR_ERROR_KAMU" />
+
+Analisis Respon: Error 500 menunjukkan bahwa input tanda petik berhasil memutus bungkusan query SQL di backend. Ini menandakan adanya celah SQL Injection.
+
+Exploitation (UNION SELECT): Menggunakan teknik UNION SELECT untuk memanipulasi data yang dikembalikan database ke aplikasi.
+
+Username: ' UNION SELECT 'x' -- 
+
+Password: x
+
+<img width="1302" height="337" alt="Payload SQLi" src="GANTI_DENGAN_LINK_GAMBAR_PAYLOAD_KAMU" />
+
+Logika Serangan: Payload ini menutup query asli dan memaksa database memberikan hasil 'x'. Karena kita mengisi password dengan 'x', aplikasi menganggap password cocok dan mengizinkan kita login sebagai admin tanpa tahu password asli.
+
+Temuan: Setelah berhasil login, muncul link ke "Private Page". Di halaman tersebut, Flag ditemukan.
+
+<img width="1204" height="541" alt="Flag Found" src="GANTI_DENGAN_LINK_GAMBAR_FLAG_KAMU" />
+
+Pelajaran: Jangan pernah menggabungkan input pengguna secara langsung ke dalam string query SQL (String Concatenation). Gunakan Prepared Statements agar input pengguna selalu dianggap sebagai data biasa, bukan perintah.
+
+Flag ID: Flag #2 - IDOR (Insecure Direct Object Reference)
+Tahapan (Step-by-Step):
+Analisis Fitur: Setelah login sebagai admin, terdapat fitur untuk mengedit halaman dengan pola URL /edit/1 dan /edit/2.
+
+Eksperimen: Mencoba melakukan enumeration pada ID halaman dengan mengganti angka di URL menjadi /edit/3.
+
+Exploitation: Sistem menampilkan halaman rahasia yang tidak muncul di menu utama. Flag ditemukan di dalam konten atau judul halaman tersebut.
+
+Pelajaran: Selalu lakukan pengecekan otorisasi pada setiap permintaan akses data berdasarkan ID, jangan hanya mengandalkan persembunyian URL (security through obscurity).
 
