@@ -66,7 +66,7 @@
 
 
 
-## Nama Level:Micro-CMS v2
+### Nama Level:Micro-CMS v2
 ### Flag ID: Flag #1 - SQL Injection (Authentication Bypass)
 #### Tahapan (Step-by-Step):
 
@@ -79,4 +79,19 @@
 5. **Temuan:** Flag ditemukan di dalam menu "Private Page" yang baru muncul setelah login berhasil.
 
 
+### Flag ID: Flag #2 - Insecure Direct Object Reference (IDOR)
+## Tahapan (Step-by-Step):
+1. **Analisis Fitur:** Setelah berhasil masuk sebagai admin menggunakan teknik SQL Injection 
+saya mengakses fitur pengeditan halaman untuk melihat bagaimana sistem memproses permintaan data.
+
+2. **Observasi URL:** Memperhatikan struktur URL pada address bar saat berada di halaman edit 
+yaitu /edit/1. Hal ini mengindikasikan bahwa aplikasi memanggil konten berdasarkan ID numerik yang dikirimkan melalui URL.
+
+3. **Exploitation (Parameter Tampering):** Melakukan pengujian dengan mengganti angka ID pada URL secara manual. 
+Saya mencoba mengakses ID yang tidak muncul di menu utama, yaitu dengan mengubah URL menjadi /page/3.
+<img width="1287" height="418" alt="image" src="https://github.com/user-attachments/assets/e988537c-446b-4e9b-96ed-26f6f91f7b3b" />
+
+5. **Eksekusi:** Karena kurangnya pengecekan otorisasi di sisi server, sistem memberikan akses ke halaman rahasia yang seharusnya tidak dapat diakses secara langsung.
+6. **Temuan:** Flag ditemukan di dalam judul atau isi konten pada halaman rahasia tersebut.
+7. **Pelajaran:** Keamanan tidak boleh hanya mengandalkan penyembunyian tautan (security through obscurity). Setiap fungsi yang memanggil objek berdasarkan ID harus melalui pengecekan izin (otorisasi) untuk memastikan pengguna memang berhak mengakses data tersebut.
 
