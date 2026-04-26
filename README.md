@@ -95,3 +95,25 @@ Saya mencoba mengakses ID yang tidak muncul di menu utama, yaitu dengan mengubah
 6. **Temuan:** Flag ditemukan di dalam judul atau isi konten pada halaman rahasia tersebut.
 7. **Pelajaran:** Keamanan tidak boleh hanya mengandalkan penyembunyian tautan (security through obscurity). Setiap fungsi yang memanggil objek berdasarkan ID harus melalui pengecekan izin (otorisasi) untuk memastikan pengguna memang berhak mengakses data tersebut.
 
+
+# Flag ID: Flag #3 - Blind SQL Injection (Data Exfiltration)
+# Tahapan (Step-by-Step):
+1. **Analisis Fitur:** Pada tantangan tingkat Moderate ini, teknik Authentication Bypass sederhana tidak cukup untuk mendapatkan semua flag. Sistem memerlukan kredensial asli (username & password) yang tersimpan di database untuk menampilkan flag tertentu.
+2. **Observasi Teknik:** Saya mengidentifikasi adanya celah Blind SQL Injection pada kolom login. Karena server tidak menampilkan pesan error atau data mentah, saya menggunakan logika Boolean-based untuk "bertanya" kepada database melalui perbedaan ukuran respon (Length) di Burp Suite.
+3. **Exploitation (Finding Length):** Menggunakan Burp Suite Intruder, saya mengirimkan payload untuk menentukan panjang karakter username dan password.
+
+Payload Username: username=' OR LENGTH(username)=§1§ # (Ditemukan: 7 Karakter)
+
+Payload Password: username=' OR LENGTH(password)=§1§ # (Ditemukan: 6 Karakter)
+
+4. **Exploitation (Blind SQLi - Data Exfiltration):** Setelah mengetahui panjang karakter, saya melakukan ekstraksi data karakter demi karakter menggunakan operator LIKE dan teknik chaining.
+
+# Mantra: username=' OR username LIKE '§a§%' #&password=test
+jika huruf pertama sudah di temukan maka codedenya jadi begini misal huruf pertama c
+Mantra: username=' OR username LIKE **'c§a§%'** #&password=test dan teruskan hingga sesuai panjang username
+begitu juga dengan password **Mantra: username=' OR password LIKE '§a§%' #&password=test**
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/859ee78b-2e33-4d42-b6d1-4d0729cd135d" />
+<img width="1312" height="666" alt="image" src="https://github.com/user-attachments/assets/10f3c451-6908-4308-a025-8c3804bcca08" />
+
+Saya menebak huruf pertama, menguncinya, lalu melanjutkan ke huruf berikutnya hingga seluruh string terungkap.
+5. **Temuan:** Dengan melakukan login secara sah menggunakan username carylon dan password venice, sistem memberikan otorisasi penuh dan Flag ditemukan di dalam dashboard admin.
