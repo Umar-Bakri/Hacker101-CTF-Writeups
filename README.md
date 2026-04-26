@@ -79,24 +79,8 @@
 5. **Temuan:** Flag ditemukan di dalam menu "Private Page" yang baru muncul setelah login berhasil.
 
 
-### Flag ID: Flag #2 - Insecure Direct Object Reference (IDOR)
-## Tahapan (Step-by-Step):
-1. **Analisis Fitur:** Setelah berhasil masuk sebagai admin menggunakan teknik SQL Injection 
-saya mengakses fitur pengeditan halaman untuk melihat bagaimana sistem memproses permintaan data.
 
-2. **Observasi URL:** Memperhatikan struktur URL pada address bar saat berada di halaman edit 
-yaitu /edit/1. Hal ini mengindikasikan bahwa aplikasi memanggil konten berdasarkan ID numerik yang dikirimkan melalui URL.
-
-3. **Exploitation (Parameter Tampering):** Melakukan pengujian dengan mengganti angka ID pada URL secara manual. 
-Saya mencoba mengakses ID yang tidak muncul di menu utama, yaitu dengan mengubah URL menjadi /page/3.
-<img width="1287" height="418" alt="image" src="https://github.com/user-attachments/assets/e988537c-446b-4e9b-96ed-26f6f91f7b3b" />
-
-5. **Eksekusi:** Karena kurangnya pengecekan otorisasi di sisi server, sistem memberikan akses ke halaman rahasia yang seharusnya tidak dapat diakses secara langsung.
-6. **Temuan:** Flag ditemukan di dalam judul atau isi konten pada halaman rahasia tersebut.
-7. **Pelajaran:** Keamanan tidak boleh hanya mengandalkan penyembunyian tautan (security through obscurity). Setiap fungsi yang memanggil objek berdasarkan ID harus melalui pengecekan izin (otorisasi) untuk memastikan pengguna memang berhak mengakses data tersebut.
-
-
-# Flag ID: Flag #3 - Blind SQL Injection (Data Exfiltration)
+# Flag ID: Flag #2 - Blind SQL Injection (Data Exfiltration)
 # Tahapan (Step-by-Step):
 1. **Analisis Fitur:** Pada tantangan tingkat Moderate ini, teknik Authentication Bypass sederhana tidak cukup untuk mendapatkan semua flag. Sistem memerlukan kredensial asli (username & password) yang tersimpan di database untuk menampilkan flag tertentu.
 2. **Observasi Teknik:** Saya mengidentifikasi adanya celah Blind SQL Injection pada kolom login. Karena server tidak menampilkan pesan error atau data mentah, saya menggunakan logika Boolean-based untuk "bertanya" kepada database melalui perbedaan ukuran respon (Length) di Burp Suite.
@@ -116,4 +100,45 @@ begitu juga dengan password **Mantra: username=' OR password LIKE '§a§%' #&pas
 <img width="1312" height="666" alt="image" src="https://github.com/user-attachments/assets/10f3c451-6908-4308-a025-8c3804bcca08" />
 
 Saya menebak huruf pertama, menguncinya, lalu melanjutkan ke huruf berikutnya hingga seluruh string terungkap.
+
 5. **Temuan:** Dengan melakukan login secara sah menggunakan username carylon dan password venice, sistem memberikan otorisasi penuh dan Flag ditemukan di dalam dashboard admin.
+
+
+# Flag ID: Flag #2 HTTP Verb Tampering atau Method Manipulation
+
+## 🛠️ Langkah-langkah sesuai Video
+
+### 1. Buka Halaman Edit
+- Pergi ke halaman utama **Micro-CMS v2**, lalu klik salah satu halaman (misal: *Micro-CMS Changelog*).
+- Klik link **"Edit this page"**.
+- Kamu bakal dilempar ke halaman **Login** karena sistem minta izin admin.
+
+### 2. Tangkap Request di Burp Suite
+- Di Burp Suite, pastikan **Intercept is ON**.
+- Klik lagi link **"Edit this page"** di browser.
+- Di Burp, kamu bakal dapet request yang bentuknya:
+  <img width="1920" height="1080" alt="Screenshot 2026-04-26 132135" src="https://github.com/user-attachments/assets/1de6d43f-053a-4495-aa27-53db3549bae4" />
+# GET /page/edit/1 HTTP/1.1
+
+### 3. Gunakan Repeater (Trik Intinya)
+- Klik kanan pada request itu, pilih **Send to Repeater**.
+- Pindah ke tab **Repeater**.
+- Di baris paling atas, **ganti kata `GET` menjadi `POST`**:
+<img width="1920" height="1080" alt="Screenshot 2026-04-26 132154" src="https://github.com/user-attachments/assets/b798d090-2867-4f11-9780-415260e6ba54" />
+
+# POST /page/edit/1 HTTP/1.1
+### 4. Eksekusi
+- Klik tombol **Send**.
+- Lihat di bagian **Response**.
+- **BOOM!** Karena server cuma nge-blok akses `GET` tapi lupa nge-blok akses `POST`, **Flag-nya langsung muncul** di sana tanpa kamu perlu login sama sekali!
+
+---
+
+## 🕵️ Kenapa Cara Ini Berhasil?
+
+Ini karena **kelalaian programmer-nya**. Mereka cuma pasang *"satpam"* di pintu masuk `GET`, tapi pintu `POST` dibiarkan **terbuka lebar**. Jadi kita bisa masuk lewat **pintu belakang**. 🚪
+<img width="1920" height="1080" alt="Screenshot 2026-04-26 132217" src="https://github.com/user-attachments/assets/bf286d7c-89e9-4355-a539-5c0f39fadae1" />
+
+
+  
+
